@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "933739710779",
+    "project_id": "stekionair",
+    "storage_bucket": "stekionair.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:933739710779:android:9adea484eed6ba80a78f1e",
+        "android_client_info": {
+          "package_name": "gr.androidapp.stekionair"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "933739710779-uamsscebiku0275ih2b3vvgkbbdch71c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_l2buPgp7KCupHmEl2-aHc2JQHyw4Zlg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "933739710779-uamsscebiku0275ih2b3vvgkbbdch71c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
