@@ -6,6 +6,7 @@ import androidx.core.app.NotificationManagerCompat;
 import gr.androidapp.stekionair.Services.OnClearFromRecentService;
 
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -19,6 +20,7 @@ import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -65,13 +67,19 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
     DatabaseReference myRef;
     String TAG;
     String result="";
+    PowerManager.WakeLock wl ;
+    PowerManager pm;
 
 
+    @SuppressLint("InvalidWakeLockTag")
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         setContentView(R.layout.activity_main);
+
+        pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
+        wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "MyWakeLock");
 
 
         database = FirebaseDatabase.getInstance();
@@ -285,6 +293,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
     @Override
     public void onTrackPlay() {
         mediaPlayer.start();
+        wl.acquire();
         started = true;
         play.setText("ΠΑΥΣΗ");
         CustomNotification.customNotification(MainActivity.this,data,title, R.drawable.ic_pause);
@@ -309,6 +318,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
 
     @Override
     public void onX() {
+        wl.release();
         kill_app();
     }
     public String getTime(){
@@ -386,8 +396,8 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                 String previous="";
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                for (DataSnapshot datas : dataSnapshot.getChildren()) {
-                    String first=datas.getKey();
+                for (DataSnapshot row : dataSnapshot.getChildren()) {
+                    String first=row.getKey();
                     String[] parts=first.split("-");
                     String[] parts2=parts[0].split(":");
                     int num1=Integer.parseInt(parts2[0]+parts2[1]);
@@ -395,7 +405,8 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                         fresult(previous);
                         break;
                     }
-                    previous =first+" "+datas.getValue(String.class);
+                    previous =first+" "+row.getValue(String.class);
+                    fresult(previous);
                 }
             }
 
@@ -435,6 +446,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
     }
 
     public void kill_app(){
+        wl.release();
         NotificationManagerCompat.from(this).cancelAll();
         unregisterReceiver(broadcastReceiver);
 
