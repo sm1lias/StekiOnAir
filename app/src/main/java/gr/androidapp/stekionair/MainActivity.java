@@ -33,6 +33,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -75,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
 
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference("ΠΡΟΓΡΑΜΜΑ");
+        getMeta();
         getday();
         paizetai_twra = (TextView) findViewById(R.id.textViewTitle);
         paizetai_twra.setText(getTitle(getTime()));
@@ -212,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         play.setText("ΦΟΡΤΩΣΗ...");
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        getMeta();
+
 
         play.setOnClickListener(new View.OnClickListener() {
             @Override
