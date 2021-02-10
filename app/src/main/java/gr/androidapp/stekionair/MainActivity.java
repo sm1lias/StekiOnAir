@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
     String data, data2, title2;
     String title="Loading";
     boolean run;
+    boolean wlon;
     String cday="";
     TextView paizetai_twra;
     FirebaseDatabase database;
@@ -68,18 +69,21 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
     String TAG;
     String result="";
     PowerManager.WakeLock wl ;
-    PowerManager pm;
+    PowerManager powerManager;
 
 
-    @SuppressLint("InvalidWakeLockTag")
+
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         setContentView(R.layout.activity_main);
 
-        pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
-        wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "MyWakeLock");
+        powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        wl = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+                "MyApp::MyWakelockTag");
+
+
 
 
         database = FirebaseDatabase.getInstance();
@@ -294,6 +298,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
     public void onTrackPlay() {
         mediaPlayer.start();
         wl.acquire();
+        wlon=true;
         started = true;
         play.setText("ΠΑΥΣΗ");
         CustomNotification.customNotification(MainActivity.this,data,title, R.drawable.ic_pause);
@@ -303,6 +308,8 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
     @Override
     public void onTrackPause() {
         mediaPlayer.reset();
+        wl.release();
+        wlon=false;
         try {
             mediaPlayer.setDataSource(stream);
             mediaPlayer.prepare();
@@ -318,7 +325,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
 
     @Override
     public void onX() {
-        wl.release();
+
         kill_app();
     }
     public String getTime(){
@@ -446,7 +453,8 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
     }
 
     public void kill_app(){
-        wl.release();
+        if(wlon) wl.release();
+
         NotificationManagerCompat.from(this).cancelAll();
         unregisterReceiver(broadcastReceiver);
 
