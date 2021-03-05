@@ -35,10 +35,10 @@ public class CustomNotification {
                 .setAction(ACTION_CLOSE);
         PendingIntent pendingIntentClose=PendingIntent.getBroadcast(context, 0, intentClose,PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Intent intentOpen= new Intent(context,MainActivity.class);
-        intentOpen.setAction(Intent.ACTION_MAIN);
-        intentOpen.addCategory(Intent.CATEGORY_LAUNCHER);
-        PendingIntent pendingIntentOpen = PendingIntent.getActivity(context, 0, intentOpen, 0);
+//        Intent intentOpen= new Intent(context,MainActivity.class);
+//        intentOpen.setAction(Intent.ACTION_MAIN);
+//        intentOpen.addCategory(Intent.CATEGORY_LAUNCHER);
+//        PendingIntent pendingIntentOpen = PendingIntent.getActivity(context, 0, intentOpen, 0);
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
@@ -47,7 +47,7 @@ public class CustomNotification {
                     .setSmallIcon(R.drawable.ic_music_note)
                     .setContentTitle(title)
                     .setContentText(data)
-                    .setContentIntent(pendingIntentOpen)
+//                    .setContentIntent(pendingIntentOpen)
                     .addAction(playbutton,"Play", pendingIntentPlay)
                     .addAction(R.drawable.ic_close,"Close", pendingIntentClose)
                     .setOnlyAlertOnce(true)//show notification for only first time
@@ -65,7 +65,7 @@ public class CustomNotification {
                     .setSmallIcon(R.drawable.ic_music_note)
                     .setContentTitle("StekiOnAir")
                     .setContentText(data)
-                    .setContentIntent(pendingIntentOpen)
+//                    .setContentIntent(pendingIntentOpen)
                     .addAction(playbutton,"Play", pendingIntentPlay)
                     .addAction(R.drawable.ic_close,"Close", pendingIntentClose)
                     .setOnlyAlertOnce(true)//show notification for only first time
