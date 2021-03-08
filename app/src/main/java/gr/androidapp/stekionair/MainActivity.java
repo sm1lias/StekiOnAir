@@ -6,7 +6,6 @@ import androidx.core.app.NotificationManagerCompat;
 import gr.androidapp.stekionair.Services.OnClearFromRecentService;
 
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -35,7 +34,6 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -409,11 +407,11 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                     String[] parts2=parts[0].split(":");
                     int num1=Integer.parseInt(parts2[0]+parts2[1]);
                     if(time<num1){
-                        fresult(previous);
+                        fResult(previous);
                         break;
                     }
                     previous =first+" "+row.getValue(String.class);
-                    fresult(previous);
+                    fResult(previous);
                 }
             }
 
@@ -427,7 +425,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
 
         return result;
     }
-    public void fresult(String previous){
+    public void fResult(String previous){
         result=previous;
     }
 
