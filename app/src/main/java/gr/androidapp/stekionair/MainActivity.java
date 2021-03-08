@@ -218,7 +218,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         webSettings.setBuiltInZoomControls(true);
         webSettings.setDisplayZoomControls(false);
         webSettings.setSupportZoom(true);
-        //webSettings.setSaveFormData(true);
+//        webSettings.setSaveFormData(true);
 
 
         play = (Button) findViewById(R.id.play);
