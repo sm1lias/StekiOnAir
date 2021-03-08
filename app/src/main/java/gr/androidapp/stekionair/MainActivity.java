@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference("ΠΡΟΓΡΑΜΜΑ");
         getMeta();
-        getday();
+        getDay();
         paizetai_twra = (TextView) findViewById(R.id.textViewTitle);
         paizetai_twra.setText(getTitle(getTime()));
         data=data2;
@@ -334,7 +334,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
             return String.valueOf(hour)+"0"+String.valueOf(minutes);
         return String.valueOf(hour)+String.valueOf(minutes);
     }
-    public void getday(){
+    public void getDay(){
         Calendar calendar = Calendar.getInstance();
         int day = calendar.get(Calendar.DAY_OF_WEEK);
 
@@ -529,7 +529,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                             }
                             if (!title2.equals(title)) {
                                 title = title2;
-                                getday();
+                                getDay();
                                 paizetai_twra.setText(title);
                                 change_not();
                             }
