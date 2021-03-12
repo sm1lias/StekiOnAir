@@ -65,10 +65,10 @@ public class IcyStreamMeta<Message> {
     }
 
     public void refreshMeta() throws IOException {
-        retreiveMetadata();
+        retrieveMetadata();
     }
 
-    private void retreiveMetadata() throws IOException {
+    private void retrieveMetadata() throws IOException {
         URLConnection con = streamUrl.openConnection();
         con.setRequestProperty("Icy-MetaData", "1");
         con.setRequestProperty("Connection", "close");

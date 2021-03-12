@@ -57,8 +57,8 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
     private NotificationManager notificationManager;
     private String data, data2, title2;
     private String title="Loading";
-    private String cday="";
-    private TextView paizetai_twra;
+    private String cDay ="";
+    private TextView paizetaiTwra;
     private FirebaseDatabase database;
     private DatabaseReference myRef;
     private String TAG;
@@ -84,8 +84,8 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         getMeta();
         getDay();
 
-        paizetai_twra = (TextView) findViewById(R.id.textViewTitle);
-        paizetai_twra.setText(getTitle(getTime()));
+        paizetaiTwra = (TextView) findViewById(R.id.textViewTitle);
+        paizetaiTwra.setText(getTitle(getTime()));
         data=data2;
 
 
@@ -114,19 +114,19 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                     // Set the hint text color gray
                     tv.setTextSize(20);
                 }
-                if (position==1 && cday.equals("Monday"))
+                if (position==1 && cDay.equals("Monday"))
                     tv.setTextColor(Color.BLUE);
-                if (position==2 && cday.equals("Tuesday"))
+                if (position==2 && cDay.equals("Tuesday"))
                     tv.setTextColor(Color.BLUE);
-                if (position==3 && cday.equals("Wednesday"))
+                if (position==3 && cDay.equals("Wednesday"))
                     tv.setTextColor(Color.BLUE);
-                if (position==4 && cday.equals("Thursday"))
+                if (position==4 && cDay.equals("Thursday"))
                     tv.setTextColor(Color.BLUE);
-                if (position==5 && cday.equals("Friday"))
+                if (position==5 && cDay.equals("Friday"))
                     tv.setTextColor(Color.BLUE);
-                if (position==6 && cday.equals("Saturday"))
+                if (position==6 && cDay.equals("Saturday"))
                     tv.setTextColor(Color.BLUE);
-                if (position==7 && cday.equals("Sunday"))
+                if (position==7 && cDay.equals("Sunday"))
                     tv.setTextColor(Color.BLUE);
 
                 return view;
@@ -328,25 +328,25 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
 
         switch (day) {
             case Calendar.SUNDAY:
-                cday="Sunday";
+                cDay ="Sunday";
                 break;
             case Calendar.MONDAY:
-                cday="Monday";
+                cDay ="Monday";
                 break;
             case Calendar.TUESDAY:
-                cday="Tuesday";
+                cDay ="Tuesday";
                 break;
             case Calendar.WEDNESDAY:
-                cday="Wednesday";
+                cDay ="Wednesday";
                 break;
             case Calendar.THURSDAY:
-                cday="Thursday";
+                cDay ="Thursday";
                 break;
             case Calendar.FRIDAY:
-                cday="Friday";
+                cDay ="Friday";
                 break;
             case Calendar.SATURDAY:
-                cday="Saturday";
+                cDay ="Saturday";
                 break;
         }
     }
@@ -377,7 +377,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
     public String getTitle(String tm){
         int time=Integer.parseInt(tm);
 
-        myRef.child(cday).addValueEventListener(new ValueEventListener() {
+        myRef.child(cDay).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String previous="";
@@ -500,7 +500,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                             if (!title2.equals(title)) {
                                 title = title2;
                                 getDay();
-                                paizetai_twra.setText(title);
+                                paizetaiTwra.setText(title);
                                 change_not();
                             }
                         }
