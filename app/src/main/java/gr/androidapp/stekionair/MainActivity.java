@@ -49,25 +49,22 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity implements NetworkChangeReceiver.ConnectionChangeCallback, Playable {
-    WebView webView;
+    private WebView webView;
     private final static String stream = "https://i8.streams.ovh/sc/stekiona/stream";
-    Button play;
-    MediaPlayer mediaPlayer;
-    boolean started = false;
-    boolean prepared = false;
-    NotificationManager notificationManager;
-    String data, data2, title2;
-    String title="Loading";
-    boolean run;
-    boolean wlon;
-    String cday="";
-    TextView paizetai_twra;
-    FirebaseDatabase database;
-    DatabaseReference myRef;
-    String TAG;
-    String result="";
-    PowerManager.WakeLock wl ;
-    PowerManager powerManager;
+    private Button play;
+    private MediaPlayer mediaPlayer;
+    private boolean started, prepared, run, wLon;
+    private NotificationManager notificationManager;
+    private String data, data2, title2;
+    private String title="Loading";
+    private String cday="";
+    private TextView paizetai_twra;
+    private FirebaseDatabase database;
+    private DatabaseReference myRef;
+    private String TAG;
+    private String result="";
+    private PowerManager.WakeLock wl ;
+    private PowerManager powerManager;
 
 
 
@@ -81,13 +78,12 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         wl = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
                 "MyApp::MyWakelockTag");
 
-
-
-
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference("ΠΡΟΓΡΑΜΜΑ");
+
         getMeta();
         getDay();
+
         paizetai_twra = (TextView) findViewById(R.id.textViewTitle);
         paizetai_twra.setText(getTitle(getTime()));
         data=data2;
@@ -230,14 +226,8 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
             @Override
             public void onClick(View view) {
 
-                if (started) {
-                    onTrackPause();
-
-                } else {
-                    onTrackPlay();
-
-                }
-
+                if (started) onTrackPause();
+                else onTrackPlay();
             }
         });
 
@@ -296,18 +286,17 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
     public void onTrackPlay() {
         mediaPlayer.start();
         wl.acquire();
-        wlon=true;
+        wLon =true;
         started = true;
         play.setText("ΠΑΥΣΗ");
         CustomNotification.customNotification(MainActivity.this,data,title, R.drawable.ic_pause);
-
     }
 
     @Override
     public void onTrackPause() {
         mediaPlayer.reset();
         wl.release();
-        wlon=false;
+        wLon =false;
         try {
             mediaPlayer.setDataSource(stream);
             mediaPlayer.prepare();
@@ -317,15 +306,13 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         }
         started = false;
         play.setText("ΕΝΑΡΞΗ");
-
-
     }
 
     @Override
     public void onX() {
-
         kill_app();
     }
+
     public String getTime(){
         Calendar calendar = Calendar.getInstance();
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -334,6 +321,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
             return String.valueOf(hour)+"0"+String.valueOf(minutes);
         return String.valueOf(hour)+String.valueOf(minutes);
     }
+
     public void getDay(){
         Calendar calendar = Calendar.getInstance();
         int day = calendar.get(Calendar.DAY_OF_WEEK);
@@ -363,12 +351,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         }
     }
 
-
-
     public void schedule(String day){
-
-
-
         myRef.child(day).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -392,7 +375,6 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
     }
 
     public String getTitle(String tm){
-
         int time=Integer.parseInt(tm);
 
         myRef.child(cday).addValueEventListener(new ValueEventListener() {
@@ -421,14 +403,12 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                 Log.w(TAG, "Failed to read value.", error.toException());
             }
         });
-
-
         return result;
     }
+
     public void fResult(String previous){
         result=previous;
     }
-
 
     public void showMessage(String message) { // show the data from the database
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -451,7 +431,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
     }
 
     public void kill_app(){
-        if(wlon) wl.release();
+        if(wLon) wl.release();
 
         NotificationManagerCompat.from(this).cancelAll();
         unregisterReceiver(broadcastReceiver);
@@ -461,7 +441,6 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         }
         System.exit(0);
     }
-
 
     private class PlayTask extends AsyncTask<String, Void, Boolean> {
 
@@ -486,19 +465,14 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         }
     }
 
-
-
-    public void change_not(){
+    public void change_not() {
         if(started)
             CustomNotification.customNotification(MainActivity.this,data,title, R.drawable.ic_pause);
         else
             CustomNotification.customNotification(MainActivity.this,data,title, R.drawable.ic_play_arrow);
     }
 
-
-
-    private void getMeta()
-    {
+    private void getMeta() {
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             public void run() {
@@ -513,9 +487,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                     data2= icy.getTitle();
                     title2=getTitle(getTime());
 
-
                     final TextView meta = (TextView) findViewById(R.id.textView);
-
 
                     runOnUiThread(new Runnable() {
                         public void run() {
@@ -524,8 +496,6 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                                 data=data2;
                                 meta.setText(data);
                                 change_not();
-
-
                             }
                             if (!title2.equals(title)) {
                                 title = title2;
@@ -533,8 +503,6 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                                 paizetai_twra.setText(title);
                                 change_not();
                             }
-
-
                         }
                     });
                 } catch (MalformedURLException e) {
