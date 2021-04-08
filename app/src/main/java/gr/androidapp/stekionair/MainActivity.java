@@ -49,15 +49,15 @@ import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static gr.androidapp.stekionair.GetTime.cDay;
+
 public class MainActivity extends AppCompatActivity implements NetworkChangeReceiver.ConnectionChangeCallback, Playable {
-    private WebView webView;
     private final static String stream = "https://i8.streams.ovh/sc/stekiona/stream";
     private MediaPlayer mediaPlayer;
     private boolean started, prepared, run, wLon;
     private NotificationManager notificationManager;
     private String data, data2, title2;
     private String title="Loading";
-    private String cDay ="";
     private FirebaseDatabase database;
     private DatabaseReference myRef;
     private String TAG;
@@ -84,10 +84,10 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         myRef = database.getReference("ΠΡΟΓΡΑΜΜΑ");
 
         getMeta();
-        getDay();
+        GetTime.getDay();
 
 
-        binding.textViewTitle.setText(getTitle(getTime()));
+        binding.textViewTitle.setText(getTitle(GetTime.getTime()));
         data=data2;
 
 
@@ -190,9 +190,8 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
 //        CookieManager cookieManager = CookieManager.getInstance();
 //        cookieManager.setAcceptCookie(true);
 
-        webView=findViewById(R.id.webView);
-        webView.setLayerType(WebView.LAYER_TYPE_SOFTWARE, null);
-        webView.setWebViewClient(new WebViewClient(){
+        binding.webView.setLayerType(WebView.LAYER_TYPE_SOFTWARE, null);
+        binding.webView.setWebViewClient(new WebViewClient(){
 
             public void onPageFinished(WebView view,String url){
                 ProgressBar progressbar = (ProgressBar) findViewById(R.id.progressBar);
@@ -200,11 +199,11 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
 
             }
         });
-        webView.loadUrl("https://stekionair.chatango.com/");
+        binding.webView.loadUrl("https://stekionair.chatango.com/");
 
 
 
-        WebSettings webSettings = webView.getSettings();
+        WebSettings webSettings = binding.webView.getSettings();
 
         webSettings.setJavaScriptEnabled(true);
         webSettings.setDomStorageEnabled(true);
@@ -253,7 +252,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
     public void onConnectionChange(boolean isConnected) {
         if(isConnected){
             // will be called when internet is back
-            webView.reload();
+            binding.webView.reload();
         }
         else{
             // will be called when internet is gone.
@@ -313,43 +312,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         kill_app();
     }
 
-    public String getTime(){
-        Calendar calendar = Calendar.getInstance();
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int minutes = calendar.get(Calendar.MINUTE);
-        if (minutes<10)
-            return String.valueOf(hour)+"0"+String.valueOf(minutes);
-        return String.valueOf(hour)+String.valueOf(minutes);
-    }
 
-    public void getDay(){
-        Calendar calendar = Calendar.getInstance();
-        int day = calendar.get(Calendar.DAY_OF_WEEK);
-
-        switch (day) {
-            case Calendar.SUNDAY:
-                cDay ="Sunday";
-                break;
-            case Calendar.MONDAY:
-                cDay ="Monday";
-                break;
-            case Calendar.TUESDAY:
-                cDay ="Tuesday";
-                break;
-            case Calendar.WEDNESDAY:
-                cDay ="Wednesday";
-                break;
-            case Calendar.THURSDAY:
-                cDay ="Thursday";
-                break;
-            case Calendar.FRIDAY:
-                cDay ="Friday";
-                break;
-            case Calendar.SATURDAY:
-                cDay ="Saturday";
-                break;
-        }
-    }
 
     public void schedule(String day){
         myRef.child(day).addValueEventListener(new ValueEventListener() {
@@ -485,7 +448,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                         data = icy.getArtist() + " - " + icy.getTitle();
                     }*/
                     data2= icy.getTitle();
-                    title2=getTitle(getTime());
+                    title2=getTitle(GetTime.getTime());
 
                     final TextView meta = (TextView) findViewById(R.id.textView);
 
@@ -499,7 +462,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                             }
                             if (!title2.equals(title)) {
                                 title = title2;
-                                getDay();
+                                GetTime.getDay();
                                 binding.textViewTitle.setText(title);
                                 change_not();
                             }
