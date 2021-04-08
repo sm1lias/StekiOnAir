@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.NotificationManagerCompat;
 import gr.androidapp.stekionair.Services.OnClearFromRecentService;
+import gr.androidapp.stekionair.databinding.ActivityMainBinding;
 
 
 import android.app.AlertDialog;
@@ -51,20 +52,19 @@ import java.util.TimerTask;
 public class MainActivity extends AppCompatActivity implements NetworkChangeReceiver.ConnectionChangeCallback, Playable {
     private WebView webView;
     private final static String stream = "https://i8.streams.ovh/sc/stekiona/stream";
-    private Button play;
     private MediaPlayer mediaPlayer;
     private boolean started, prepared, run, wLon;
     private NotificationManager notificationManager;
     private String data, data2, title2;
     private String title="Loading";
     private String cDay ="";
-    private TextView paizetaiTwra;
     private FirebaseDatabase database;
     private DatabaseReference myRef;
     private String TAG;
     private String result="";
     private PowerManager.WakeLock wl ;
     private PowerManager powerManager;
+    private ActivityMainBinding binding;
 
 
 
@@ -72,7 +72,9 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        setContentView(R.layout.activity_main);
+        binding=ActivityMainBinding.inflate(getLayoutInflater());
+        View view=binding.getRoot();
+        setContentView(view);
 
         powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         wl = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
@@ -84,15 +86,14 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         getMeta();
         getDay();
 
-        paizetaiTwra = (TextView) findViewById(R.id.textViewTitle);
-        paizetaiTwra.setText(getTitle(getTime()));
+
+        binding.textViewTitle.setText(getTitle(getTime()));
         data=data2;
 
 
         String[] arraySpinner = new String[] {
                 "ΠΡΟΓΡΑΜΜΑ", "ΔΕΥΤΕΡΑ", "ΤΡΙΤΗ", "ΤΕΤΑΡΤΗ", "ΠΕΜΠΤΗ", "ΠΑΡΑΣΚΕΥΗ", "ΣΑΒΒΑΤΟ", "ΚΥΡΙΑΚΗ"
         };
-        Spinner spinner = (Spinner) findViewById(R.id.spinner);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, arraySpinner){
             @Override
@@ -135,10 +136,10 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
 
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+        binding.spinner.setAdapter(adapter);
 
 
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        binding.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
@@ -157,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                     schedule("Saturday");
                 if(position==7)
                     schedule("Sunday");
-                spinner.setSelection(0);
+                binding.spinner.setSelection(0);
 
             }
 
@@ -215,14 +216,13 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
 //        webSettings.setSaveFormData(true);
 
 
-        play = (Button) findViewById(R.id.play);
-        play.setEnabled(false);
-        play.setText("ΦΟΡΤΩΣΗ...");
+        binding.play.setEnabled(false);
+        binding.play.setText("ΦΟΡΤΩΣΗ...");
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
 
-        play.setOnClickListener(new View.OnClickListener() {
+        binding.play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -288,7 +288,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         wl.acquire();
         wLon =true;
         started = true;
-        play.setText("ΠΑΥΣΗ");
+        binding.play.setText("ΠΑΥΣΗ");
         CustomNotification.customNotification(MainActivity.this,data,title, R.drawable.ic_pause);
     }
 
@@ -305,7 +305,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
             e.printStackTrace();
         }
         started = false;
-        play.setText("ΕΝΑΡΞΗ");
+        binding.play.setText("ΕΝΑΡΞΗ");
     }
 
     @Override
@@ -460,8 +460,8 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
-            play.setEnabled(true);
-            play.setText("ΕΝΑΡΞΗ");
+            binding.play.setEnabled(true);
+            binding.play.setText("ΕΝΑΡΞΗ");
         }
     }
 
@@ -500,7 +500,7 @@ public class MainActivity extends AppCompatActivity implements NetworkChangeRece
                             if (!title2.equals(title)) {
                                 title = title2;
                                 getDay();
-                                paizetaiTwra.setText(title);
+                                binding.textViewTitle.setText(title);
                                 change_not();
                             }
                         }
