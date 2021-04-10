@@ -1,2 +1,2 @@
 # StekiOnAir
-A radio android application for my local radio internet station 
+A radio android application for my local internet radio station 
